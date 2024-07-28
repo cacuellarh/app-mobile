@@ -1,0 +1,33 @@
+<button (click)="LoadData()">crear</button>
+
+<table>
+    <button (click)="lastCommand()">atras</button>
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Producto</th>
+            <th>Valor Caja</th>
+            <th>Cantidad</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let collect of collectionData">
+            <td><input type="text" value="{{collect.Id}}"></td>
+            <td><input type="text" value="{{collect.Product}}"></td>
+            <td><input type="text" value="{{collect.BoxValue}}" (input)="UpdateField($event, collect.Id!,InventoryBoxFields.BoxValue)"></td>
+            <td><input type="text" value="{{collect.Cuantity}}" (input)="UpdateField($event, collect.Id!, InventoryBoxFields.Cuantity)"></td>
+            <td><input type="text" value="{{collect.TotalValue}}"></td>
+        </tr>
+    </tbody>
+</table>
+<button (click)="OpenCreateProductEvent()">añadir</button>
+<div *ngIf="OpenCreateProduct" >
+    <form [formGroup]="inventoryBoxForm" (ngSubmit)="createRecord()">
+        <input type="text" placeholder="Producto" formControlName="Product">
+        <input type="text" placeholder="Valor caja" formControlName="BoxValue">
+        <input type="text" placeholder="Cantidad" formControlName="Cuantity">
+    <button type="submit">Crear</button>
+    </form>
+    
+</div>
