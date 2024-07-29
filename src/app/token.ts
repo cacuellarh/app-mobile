@@ -12,6 +12,7 @@ import { IMapper } from '../Aplication/Contracts/Map/IMap';
 import { ICommandHandleService } from '../Presentation/Core/Contracts/Command/ICommandHandleService';
 import { IUpdateCuantityRequest } from '../Presentation/Core/Base/Request/IUpdateCuantityRequest';
 import { IFactoryForm } from '../Presentation/Core/Contracts/Factory/IFactoryForm';
+import { ICommandFactory } from '../Presentation/Core/Contracts/Command/ICommandFactory';
 
 
 //export const BASE_REPOSITORY_TOKEN = new InjectionToken<IBaseRepository<Product>>('BaseRepository');
@@ -41,3 +42,5 @@ export const COMMAND_SERVICE = new InjectionToken<ICommandHandleService>('Comman
 export const UPDATE_CUANTITY_REQUEST = new InjectionToken<IUpdateCuantityRequest<BaseEntity>>('UpdateCuantityRequest');
 
 export const FORM_FACTORY = new InjectionToken<IFactoryForm>('FormFactory');
+
+export const COMMAND_FACTORY = new InjectionToken<ICommandFactory<BaseEntity>>('CommandFactory');

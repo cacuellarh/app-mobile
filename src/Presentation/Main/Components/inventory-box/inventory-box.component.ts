@@ -2,6 +2,7 @@ import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { InventoryBoxUseCaseFacade } from '../../../../Aplication/UseCase/InventoryBox/Facade/InventoryBoxUseCaseFacade';
 import {
   CALCULATE_USE_CASE,
+  COMMAND_FACTORY,
   COMMAND_SERVICE,
   FORM_FACTORY,
   MAPPER,
@@ -25,6 +26,10 @@ import { InventoryBoxFormFactory } from '../../../Core/Factory/Forms/InventoryBo
 import { IFactoryForm } from '../../../Core/Contracts/Factory/IFactoryForm';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CreateRecordCommand } from '../../../Core/Commands/EntityCommands/Common/CreateRecordCommand';
+import { ICommandFactory } from '../../../Core/Contracts/Command/ICommandFactory';
+import { CommandFactory } from '../../../Core/Factory/Commands/CommandFactory';
+import { CommandType } from '../../../Core/Base/Enums/CommandsType';
+import { BaseRepository } from '../../../../Infraestructure/Persistence/Repositories/BaseRepository';
 
 @Component({
   selector: 'app-inventory-box',
@@ -41,6 +46,7 @@ import { CreateRecordCommand } from '../../../Core/Commands/EntityCommands/Commo
     },
     { provide: COMMAND_SERVICE, useClass: CommandHandleService },
     { provide: FORM_FACTORY, useClass: InventoryBoxFormFactory },
+    { provide: COMMAND_FACTORY, useClass: CommandFactory<InventoryBox> },
   ],
 })
 export class InventoryBoxComponent implements OnInit, OnDestroy {
@@ -54,7 +60,9 @@ export class InventoryBoxComponent implements OnInit, OnDestroy {
     @Inject(COMMAND_SERVICE)
     private commanHanddler: ICommandHandleService,
     @Inject(FORM_FACTORY)
-    private formFactory: IFactoryForm
+    private formFactory: IFactoryForm,
+    @Inject(COMMAND_FACTORY)
+    private commandFactory: ICommandFactory<InventoryBox>
   ) {
     this.inventoryBoxForm = this.formFactory.CreateForm();
   }
@@ -68,23 +76,22 @@ export class InventoryBoxComponent implements OnInit, OnDestroy {
   collectionData: InventoryBox[] = [];
   private destroy$ = new Subject<void>();
   private errorMesage: string = '';
-  private request!: IUpdateCuantityRequest<InventoryBox>;
   private commandUpdate!: UpdateFieldCommand;
   private commandCreate!: CreateRecordCommand<InventoryBox>;
-  private loadDataCommand!: LoadRecords<InventoryBox>;
   OpenCreateProduct: boolean = false;
   public InventoryBoxFields = InventoryBoxFields;
   public inventoryBoxForm!: FormGroup;
 
   async LoadData() {
-    this.collectionData.length = 0
-    this.loadDataCommand = new LoadRecords(
+    this.collectionData.length = 0;
+    let loadDataCommand = this.commandFactory.CreateCommand(
+      CommandType.LoadRecords,
       this.inventoryBoxUseCaseFacade,
       this.mapper,
       this.collectionData,
       this.CalculateTotal.bind(this)
     );
-    this.commanHanddler.ExecuteCommand(this.loadDataCommand)
+    this.commanHanddler.ExecuteCommand(loadDataCommand);
   }
 
   private CalculateTotal(): void {
@@ -98,13 +105,16 @@ export class InventoryBoxComponent implements OnInit, OnDestroy {
   async UpdateField(event: any, id: string, fieldType: InventoryBoxFields) {
     let onValue = event.target.value;
     if (onValue && onValue > 0) {
-      this.request = {
+      let request: IUpdateCuantityRequest<InventoryBox> = {
         collectionData: this.collectionData,
         id: id,
         newValue: onValue,
         fieldType: fieldType,
       };
-      this.commandUpdate = new UpdateFieldCommand(this.request);
+      this.commandUpdate = this.commandFactory.CreateCommand(
+        CommandType.UpdateCuantityInventoryBox,
+        request
+      ) as UpdateFieldCommand;
 
       this.commanHanddler.ExecuteCommand(this.commandUpdate);
       this.CalculateTotal();
@@ -118,30 +128,34 @@ export class InventoryBoxComponent implements OnInit, OnDestroy {
     );
 
     this.commanHanddler.ExecuteCommand(this.commandCreate);
-    this.saveAll()
-    await this.LoadData()
+    this.saveAll();
+    await this.LoadData();
   }
 
-  public saveAll()
-  {
-    this.collectionData.forEach(element => {
-      this.inventoryBoxUseCaseFacade.Update(element.Id as string, element)
-      .subscribe(res =>{
-        console.log(res)
-      })
-    });
+  public saveAll() {
+    var saveRecordsCommand = this.commandFactory.CreateCommand(
+      CommandType.SaveCurrentRecords,
+      this.collectionData,
+      this.inventoryBoxUseCaseFacade
+    );
+    this.commanHanddler.ExecuteCommand(saveRecordsCommand);
   }
 
   public OpenCreateProductEvent() {
     this.OpenCreateProduct = true;
   }
+  async Delete(inventory: InventoryBox) {
+    let deleteCommand = this.commandFactory.CreateCommand(
+      CommandType.DeleteRecord,
+      inventory,
+      this.inventoryBoxUseCaseFacade,
+      this.LoadData.bind(this)
+    );
+    this.commanHanddler.ExecuteCommand(deleteCommand);
+  }
 
   lastCommand() {
-    if (this.commandUpdate) {
-      this.commanHanddler.UndoLastCommand();
-      this.CalculateTotal();
-    } else {
-      console.error('No hay comandos en cola.');
-    }
+    this.commanHanddler.UndoLastCommand();
+    this.CalculateTotal();
   }
 }

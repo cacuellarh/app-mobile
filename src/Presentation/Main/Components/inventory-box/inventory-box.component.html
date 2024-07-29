@@ -15,9 +15,10 @@
         <tr *ngFor="let collect of collectionData">
             <td><input type="text" value="{{collect.Id}}"></td>
             <td><input type="text" value="{{collect.Product}}"></td>
-            <td><input type="text" value="{{collect.BoxValue}}" (input)="UpdateField($event, collect.Id!,InventoryBoxFields.BoxValue)"></td>
-            <td><input type="text" value="{{collect.Cuantity}}" (input)="UpdateField($event, collect.Id!, InventoryBoxFields.Cuantity)"></td>
+            <td><input type="text" value="{{collect.BoxValue}}" (focusout)="UpdateField($event, collect.Id!,InventoryBoxFields.BoxValue)"></td>
+            <td><input type="text" value="{{collect.Cuantity}}" (focusout)="UpdateField($event, collect.Id!, InventoryBoxFields.Cuantity)"></td>
             <td><input type="text" value="{{collect.TotalValue}}"></td>
+            <button (click)="Delete(collect!)">Eliminar</button>
         </tr>
     </tbody>
 </table>
@@ -27,6 +28,7 @@
         <input type="text" placeholder="Producto" formControlName="Product">
         <input type="text" placeholder="Valor caja" formControlName="BoxValue">
         <input type="text" placeholder="Cantidad" formControlName="Cuantity">
+        
     <button type="submit">Crear</button>
     </form>
     

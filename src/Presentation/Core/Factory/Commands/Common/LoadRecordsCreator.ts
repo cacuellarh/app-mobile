@@ -6,13 +6,13 @@ import { ICommand } from "../../../Contracts/Command/ICommand";
 import { ICommandCreator } from "../../../Contracts/Command/ICommandCreator";
 import { CalculateTotalDelegate } from "../../../Delegates/CalculateTotalDelegate";
 
-export class LoadRecordsCreator implements ICommandCreator
+export class LoadRecordsCreator<T extends BaseEntity> implements ICommandCreator
 {
     Create(...args: any[]): ICommand {
-        return new LoadRecords<BaseEntity>(
-            args[0] as IUseCaseFacade<BaseEntity>,
-            args[1] as IMapper<BaseEntity>,
-            args[2] as BaseEntity[],
+        return new LoadRecords<T>(
+            args[0] as IUseCaseFacade<T>,
+            args[1] as IMapper<T>,
+            args[2] as T[],
             args[3] as CalculateTotalDelegate
           );
     }

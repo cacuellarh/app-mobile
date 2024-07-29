@@ -2,5 +2,7 @@ export enum CommandType
 {
     CreateRecord,
     LoadRecords,
-    UpdateCuantityInventoryBox
+    UpdateCuantityInventoryBox,
+    SaveCurrentRecords,
+    DeleteRecord
 }

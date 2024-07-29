@@ -10,6 +10,7 @@ export class CommandHandleService implements ICommandHandleService {
   ExecuteCommand(Command: ICommand): void {
     Command.Execute().catch((error) => console.error(error));
     this.historyCommands.push(Command)
+    console.log(this.historyCommands)
   }
   UndoLastCommand(): void {
     const command = this.historyCommands.pop();

@@ -15,8 +15,6 @@ import { FireBaseResponse } from '../../../Domain/Commons/Response/Repository/Fi
 import { ReponseRepositoryCreator } from '../../../Aplication/Utils/ResponseRepositoryCreator';
 import { doc, getDoc, where } from 'firebase/firestore';
 import { MapperRequest } from '../../../Domain/Commons/Request/Repository/MapperRequest';
-import { DateFormat } from '../../../Aplication/Utils/DateFormat';
-import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',

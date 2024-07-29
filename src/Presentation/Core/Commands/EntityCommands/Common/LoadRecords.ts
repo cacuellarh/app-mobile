@@ -13,7 +13,7 @@ export class LoadRecords<Entity extends BaseEntity> implements ICommand {
     
   constructor(
     @Inject(USE_CASE_GENERIC)
-    private inventoryBoxUseCaseFacade: IUseCaseFacade<Entity>,
+    private UseCaseFacade: IUseCaseFacade<Entity>,
     @Inject(MAPPER)
     private mapper: IMapper<Entity>,
     private collection: Entity[],
@@ -21,7 +21,7 @@ export class LoadRecords<Entity extends BaseEntity> implements ICommand {
   ) {}
 
   async Execute(): Promise<void> {
-    this.inventoryBoxUseCaseFacade.GetAll()
+    this.UseCaseFacade.GetAll()
     .pipe(takeUntil(this.destroy$))
     .subscribe({
       next: (response: FireBaseResponse) => {
