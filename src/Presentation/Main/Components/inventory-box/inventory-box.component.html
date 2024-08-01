@@ -1,4 +1,4 @@
-<button (click)="LoadData()">crear</button>
+
 
 <table>
     <button (click)="lastCommand()">atras</button>
@@ -12,13 +12,13 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let collect of collectionData">
+        <tr *ngFor="let collect of collectionInventoryBox">
             <td><input type="text" value="{{collect.Id}}"></td>
-            <td><input type="text" value="{{collect.Product}}"></td>
-            <td><input type="text" value="{{collect.BoxValue}}" (focusout)="UpdateField($event, collect.Id!,InventoryBoxFields.BoxValue)"></td>
-            <td><input type="text" value="{{collect.Cuantity}}" (focusout)="UpdateField($event, collect.Id!, InventoryBoxFields.Cuantity)"></td>
+            <td><input type="text" value="{{collect.Product}}" (focusout)="updateProductName(collect.Id!, $event)"></td>
+            <td><input type="text" value="{{collect.BoxValue}}" (focusout)="updateField($event, collect.Id!,InventoryBoxFields.BoxValue)"></td>
+            <td><input type="text" value="{{collect.Cuantity}}" (focusout)="updateField($event, collect.Id!, InventoryBoxFields.Cuantity)"></td>
             <td><input type="text" value="{{collect.TotalValue}}"></td>
-            <button (click)="Delete(collect!)">Eliminar</button>
+            <button (click)="delete(collect!)">Eliminar</button>
         </tr>
     </tbody>
 </table>

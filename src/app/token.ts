@@ -13,6 +13,7 @@ import { ICommandHandleService } from '../Presentation/Core/Contracts/Command/IC
 import { IUpdateCuantityRequest } from '../Presentation/Core/Base/Request/IUpdateCuantityRequest';
 import { IFactoryForm } from '../Presentation/Core/Contracts/Factory/IFactoryForm';
 import { ICommandFactory } from '../Presentation/Core/Contracts/Command/ICommandFactory';
+import { IInventoryServices } from '../Presentation/Core/Contracts/Services/IInventoryServices';
 
 
 //export const BASE_REPOSITORY_TOKEN = new InjectionToken<IBaseRepository<Product>>('BaseRepository');
@@ -44,3 +45,5 @@ export const UPDATE_CUANTITY_REQUEST = new InjectionToken<IUpdateCuantityRequest
 export const FORM_FACTORY = new InjectionToken<IFactoryForm>('FormFactory');
 
 export const COMMAND_FACTORY = new InjectionToken<ICommandFactory<BaseEntity>>('CommandFactory');
+
+export const INVENTORY_SERVICE = new InjectionToken<IInventoryServices<BaseEntity>>('InventoryService');

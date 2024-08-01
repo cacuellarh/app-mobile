@@ -2,6 +2,7 @@ import { IUseCaseFacade } from '../../../../../Aplication/Contracts/Facade/IUseC
 import { BaseEntity } from '../../../../../Domain/Commons/Models/BaseEntity';
 import { FireBaseResponse } from '../../../../../Domain/Commons/Response/Repository/FireBaseResponse';
 import { ICommand } from '../../../Contracts/Command/ICommand';
+import { VoidDelegate } from '../../../Delegates/VoidDelegate';
 
 type Load = () => void;
 
@@ -9,13 +10,13 @@ export class DeleteRecordCommand<T extends BaseEntity> implements ICommand {
   constructor(
     private entity: T,
     private facade: IUseCaseFacade<T>,
-    private loadData: Load
+    private loadCallBack : VoidDelegate
   ) {}
   async Execute(): Promise<void> {
     this.facade.Delete(this.entity.Id as string).subscribe({
       next: (response: FireBaseResponse) => {
         if (response.status) {
-          this.loadData();
+          this.loadCallBack()
           console.log(response.message);
         }
       },

@@ -19,7 +19,6 @@ export class CreateInventoryBoxUseCase implements IUseCase<InventoryBox, FireBas
     async Execute(params: InventoryBox): Promise<FireBaseResponse> 
     {
         params.TotalValue = CalculateTotalValue.Calculate(params.Cuantity, params.BoxValue)
-        //console.log(this.inventoryBoxRepository.CalculateTotalValue(params.Cuantity, params.TotalValue)) 
         var response = await this.inventoryBoxRepository.CreateAsync(params)
         return response
     }

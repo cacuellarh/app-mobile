@@ -4,5 +4,6 @@ export enum CommandType
     LoadRecords,
     UpdateCuantityInventoryBox,
     SaveCurrentRecords,
-    DeleteRecord
+    DeleteRecord,
+    UpdateProductName
 }

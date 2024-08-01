@@ -9,6 +9,7 @@ import { DeleteRecordCreator } from './Common/DeleteRecordCreator';
 import { LoadRecordsCreator } from './Common/LoadRecordsCreator';
 import { SaveCurrentRecordsCreator } from './Common/SaveCurrentRecordsCreator';
 import { UpdateFieldCreator } from './InventoryBox/UpdateFieldCreator';
+import { UpdateProductNameCreator } from './InventoryBox/UpdateProductNameCreator';
 
 export class CommandFactory<T extends BaseEntity>
   implements ICommandFactory<T>
@@ -24,7 +25,8 @@ export class CommandFactory<T extends BaseEntity>
       { type: CommandType.CreateRecord, creator: new CreateRecordCreator<T>() },
       { type: CommandType.SaveCurrentRecords, creator: new SaveCurrentRecordsCreator<T>() },
       { type: CommandType.UpdateCuantityInventoryBox, creator: new UpdateFieldCreator() },
-      {type:CommandType.DeleteRecord, creator: new DeleteRecordCreator<T>()}
+      {type:CommandType.DeleteRecord, creator: new DeleteRecordCreator<T>()},
+      {type:CommandType.UpdateProductName, creator: new UpdateProductNameCreator()},
       
     ];
 
